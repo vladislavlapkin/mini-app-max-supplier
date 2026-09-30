@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+backups/
+*.log
+.env
+.env.*
+!.env.example
+# Исходные материалы команды и токен бота
+TO DO/

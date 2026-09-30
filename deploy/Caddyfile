@@ -1,0 +1,6 @@
+# HTTPS для мини-приложения и webhook. Сертификаты Let's Encrypt выпускаются автоматически.
+# DOMAINS — список адресов через запятую, например: 2016079.xorek.cloud, 2-26-104-162.sslip.io
+{$DOMAINS} {
+	encode zstd gzip
+	reverse_proxy app:8080
+}

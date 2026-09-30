@@ -1,0 +1,91 @@
+name: proveren-postavshik
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: supplier
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-supplier}
+      POSTGRES_DB: supplier
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # При первом запуске (пустой том) Postgres сам загрузит реальные данные ФНС
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U supplier -d supplier"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://supplier:${POSTGRES_PASSWORD:-supplier}@postgres:5432/supplier
+      REDIS_URL: redis://redis:6379
+      OPENDATA_DIR: /opendata
+    volumes:
+      - opendata:/opendata
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Инструменты разработки без локального Node.js:
+  #   docker compose run --rm tools sh -c "cd server && npm install && npm test"
+  tools:
+    image: node:22-alpine
+    profiles: ["tools"]
+    working_dir: /repo
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://supplier:${POSTGRES_PASSWORD:-supplier}@postgres:5432/supplier
+      REDIS_URL: redis://redis:6379
+      NODE_EXTRA_CA_CERTS: /repo/server/certs/russian_trusted_ca.pem
+      OPENDATA_DIR: /opendata
+    volumes:
+      - .:/repo
+      - server_node_modules:/repo/server/node_modules
+      - webapp_node_modules:/repo/webapp/node_modules
+      - opendata:/opendata
+
+  # Резервная копия БД: docker compose run --rm backup
+  backup:
+    image: postgres:16-alpine
+    profiles: ["tools"]
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:-supplier}
+    volumes:
+      - ./backups:/backups
+    entrypoint: ["sh", "-c", "pg_dump -h postgres -U supplier -d supplier -Fc -f /backups/supplier_$$(date +%Y%m%d_%H%M%S).dump && ls -la /backups"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  redisdata:
+  opendata:
+  server_node_modules:
+  webapp_node_modules:

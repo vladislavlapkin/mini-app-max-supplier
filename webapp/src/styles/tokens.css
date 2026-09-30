@@ -1,0 +1,129 @@
+/* Дизайн-токены. Палитра: электрик-синий, лавандовый фон, глубокий тёмно-синий. */
+@font-face {
+  font-family: 'Bebas Neue Cyr';
+  src: url('/fonts/BebasNeue-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Бренд */
+  --blue: #1927fc;
+  --blue-press: #1019d4;
+  --blue-soft: #e7e8ff;
+  --blue-ink: #1320c9;
+  --on-blue: #f4f2ff;
+  --on-blue-2: rgba(244, 242, 255, 0.68);
+  --on-blue-hair: rgba(244, 242, 255, 0.18);
+
+  /* Поверхности */
+  --page: #f4f2ff;
+  --surface: #ffffff;
+  --fill: #f4f2ff;
+  --fill-2: #ebe8fb;
+  --hair: rgba(14, 22, 33, 0.08);
+  --hair-strong: rgba(14, 22, 33, 0.14);
+
+  /* Текст */
+  --ink: #0e1621;
+  --ink-2: #5d6275;
+  --ink-3: #9a9db0;
+
+  /* Статусы — приглушённые, без кислотности */
+  --success: #137a4b;
+  --success-bg: #e3f3ea;
+  --warning: #8a5a00;
+  --warning-bg: #fff1d4;
+  --warning-icon: #d48f00;
+  --danger: #c0262d;
+  --danger-bg: #fde8e8;
+
+  /* Совместимость со старыми именами в разметке */
+  --brand-blue: var(--blue);
+  --bg-base: var(--page);
+  --bg-surface: var(--surface);
+  --bg-subtle: var(--fill);
+  --text-primary: var(--ink);
+  --text-secondary: var(--ink-2);
+  --text-disabled: var(--ink-3);
+  --border: var(--hair);
+  --link: var(--blue);
+
+  --toast-bg: #0e1621;
+  --toast-text: #f4f2ff;
+  --toast-action: #aab0ff;
+
+  --font-display: 'Bebas Neue Cyr', 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter Variable', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-s: 12px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+  --radius-xl: 28px;
+  --radius-full: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --gutter: 20px;
+
+  --h-button: 56px;
+  --h-button-secondary: 44px;
+  --h-field: 56px;
+  --h-chip: 40px;
+  --tap: 44px;
+
+  --shadow-float: 0 12px 32px -12px rgba(14, 22, 33, 0.18);
+  --shadow-sheet: 0 -16px 48px -16px rgba(14, 22, 33, 0.28);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur: 220ms;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --blue: #2b38ff;
+    --blue-press: #1f2be0;
+    --blue-soft: #1c2352;
+    --blue-ink: #a9b0ff;
+    --page: #0e1621;
+    --surface: #151e2b;
+    --fill: #1b2533;
+    --fill-2: #222d3d;
+    --hair: rgba(244, 242, 255, 0.08);
+    --hair-strong: rgba(244, 242, 255, 0.16);
+    --ink: #f4f2ff;
+    --ink-2: #a3a7bc;
+    --ink-3: #676d82;
+    --link: #a9b0ff;
+    --success: #5fd49a;
+    --success-bg: #11301f;
+    --warning: #f3bf55;
+    --warning-bg: #33260b;
+    --warning-icon: #f3bf55;
+    --danger: #ff7a70;
+    --danger-bg: #3a1618;
+    --toast-bg: #f4f2ff;
+    --toast-text: #0e1621;
+    --toast-action: #1927fc;
+    --shadow-float: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+    --shadow-sheet: 0 -16px 48px -16px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur: 0ms;
+  }
+}
